@@ -38,9 +38,7 @@ void main(void)
     	} else{
 
     	}
-    	for(i=1000000; i>0; i--){         // Delay
-
-    	}
+    	for(i=1488000; i>0; i--);         // Delay
     }
 	
 }
