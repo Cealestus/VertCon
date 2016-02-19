@@ -5,6 +5,7 @@
 //****************************************************************************
 
 #include "msp.h"
+#include "driverlib.h"
 
 volatile int counter;
 
