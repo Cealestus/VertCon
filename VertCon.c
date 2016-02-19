@@ -11,7 +11,7 @@ volatile int counter;
 void init(void){
 	counter = 0;
 }
-//HELLO WORLD
+
 void main(void)
 {
 	
