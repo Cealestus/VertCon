@@ -1,2 +1,0 @@
-# VertCon
-Initial ReadMe
