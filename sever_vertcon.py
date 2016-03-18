@@ -80,20 +80,20 @@ def cycle_LEDs():
     while 1:
         if currentLED == 1:
             print("Setting Floor 1 LED")
-            GPIO.output(33, GPIO.HIGH)
-            GPIO.output(35, GPIO.LOW)
-            GPIO.output(37, GPIO.LOW)
-        elif currentLED == 2:
-            print("Setting Floor 2 LED")
             GPIO.output(33, GPIO.LOW)
             GPIO.output(35, GPIO.HIGH)
-            GPIO.output(37, GPIO.LOW)
+            GPIO.output(37, GPIO.HIGH)
+        elif currentLED == 2:
+            print("Setting Floor 2 LED")
+            GPIO.output(33, GPIO.HIGH)
+            GPIO.output(35, GPIO.LOW)
+            GPIO.output(37, GPIO.HIGH)
         else:
             print("Setting Floor 3 LED")
 
-            GPIO.output(33, GPIO.LOW)
-            GPIO.output(35, GPIO.LOW)
-            GPIO.output(37, GPIO.HIGH)
+            GPIO.output(33, GPIO.HIGH)
+            GPIO.output(35, GPIO.HIGH)
+            GPIO.output(37, GPIO.LOW)
         time.sleep(15)
         if currentLED < 3:
             currentLED = currentLED + 1
