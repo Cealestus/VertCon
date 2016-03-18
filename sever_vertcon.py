@@ -178,10 +178,6 @@ def floorSelection():
         lock.release()
         time.sleep(2)
 
-#Start the PWM for 10kHz, 50% duty cycle
-p = GPIO.PWM(31, 10000)
-p.start(50.0)
-
 #Set up threads for each of the five subsystems
 t1 = threading.Thread(target=cycle_LEDs)
 t2 = threading.Thread(target=runPrimary)
