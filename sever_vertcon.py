@@ -12,8 +12,10 @@ GPIO.setup(38, GPIO.OUT)
 GPIO.setup(36, GPIO.OUT)
 GPIO.setup(37, GPIO.OUT)
 GPIO.setup(35, GPIO.OUT)
+GPIO.setup(32, GPIO.OUT)
 GPIO.setup(33, GPIO.OUT)
 GPIO.setup(31, GPIO.OUT)
+GPIO.output(32, GPIO.LOW)
 GPIO.output(36, GPIO.LOW)
 GPIO.output(38, GPIO.LOW)
 GPIO.output(40, GPIO.LOW)
@@ -80,21 +82,23 @@ def cycle_LEDs():
     while 1:
         if currentLED == 1:
             print("Setting Floor 1 LED")
-            GPIO.output(33, GPIO.LOW)
-            GPIO.output(35, GPIO.HIGH)
-            GPIO.output(37, GPIO.HIGH)
-        elif currentLED == 2:
-            print("Setting Floor 2 LED")
             GPIO.output(33, GPIO.HIGH)
             GPIO.output(35, GPIO.LOW)
-            GPIO.output(37, GPIO.HIGH)
-        else:
-            print("Setting Floor 3 LED")
-
-            GPIO.output(33, GPIO.HIGH)
+            GPIO.output(37, GPIO.LOW)
+            time.sleep(15)
+        elif currentLED == 2:
+            print("Setting Floor 2 LED")
+            GPIO.output(33, GPIO.LOW)
             GPIO.output(35, GPIO.HIGH)
             GPIO.output(37, GPIO.LOW)
-        time.sleep(15)
+            time.sleep(5)
+        else:
+            print("Setting Floor 3 LED")
+            GPIO.output(33, GPIO.LOW)
+            GPIO.output(35, GPIO.LOW)
+            GPIO.output(37, GPIO.HIGH)
+            time.sleep(5)
+        #time.sleep(15)
         if currentLED < 3:
             currentLED = currentLED + 1
         else:
@@ -102,7 +106,7 @@ def cycle_LEDs():
 
 #Thread for running the bluetooth reception and indication of pings
 def runPrimary():
-    hostMACAddress = 'B8:27:EB:FC:C1:76' # The MAC address of a Bluetooth adapter on the server. The server might have multiple Bluetooth adapters. 
+    hostMACAddress = 'B8:27:EB:7C:B2:22' # The MAC address of a Bluetooth adapter on the server. The server might have multiple Bluetooth adapters. 
     port = 7   # 3 is an arbitrary choice. However, it must match the port used by the client.  
     backlog = 1
     size = 1024
@@ -156,7 +160,7 @@ def runPrimary():
         client.close()
         s.close()
 
-#Thread for selecting the floor based on the current counter values
+#Thread for calling elevator and selecting the floor based on the current counter values
 def floorSelection():
     global counter1
     global counter2
@@ -164,7 +168,18 @@ def floorSelection():
     while 1:
         lock.acquire()
         if counter1 >= 20:
+            #Rotate elevator motor one way
             GPIO.output(36, GPIO.HIGH)
+            time.sleep(.75)
+            GPIO.output(36, GPIO.LOW)
+            time.sleep(1)
+            #Return elevator motor to original position
+            GPIO.output(32, GPIO.HIGH)
+            time.sleep(.3)
+            GPIO.output(32, GPIO.LOW)
+            #Wait until photodiode registers elevator has reached floor
+            #Rotate floor motor one way
+            #Return floor motor to original position
             print("Floor Select: 1")
             counter1 = 0
         if counter2 >= 20:
