@@ -80,18 +80,17 @@ def cycle_LEDs():
     while 1:
         if currentLED == 1:
             print("Setting Floor 1 LED")
-            GPIO.output(33, GPIO.LOW)
+            GPIO.output(33, GPIO.HIGH)
             GPIO.output(35, GPIO.HIGH)
             GPIO.output(37, GPIO.HIGH)
         elif currentLED == 2:
             print("Setting Floor 2 LED")
-            GPIO.output(33, GPIO.HIGH)
+            GPIO.output(33, GPIO.LOW)
             GPIO.output(35, GPIO.LOW)
             GPIO.output(37, GPIO.HIGH)
         else:
             print("Setting Floor 3 LED")
-
-            GPIO.output(33, GPIO.HIGH)
+            GPIO.output(33, GPIO.LOW)
             GPIO.output(35, GPIO.HIGH)
             GPIO.output(37, GPIO.LOW)
         time.sleep(15)
@@ -102,7 +101,7 @@ def cycle_LEDs():
 
 #Thread for running the bluetooth reception and indication of pings
 def runPrimary():
-    hostMACAddress = 'B8:27:EB:FC:C1:76' # The MAC address of a Bluetooth adapter on the server. The server might have multiple Bluetooth adapters. 
+    hostMACAddress = 'B8:27:EB:7C:B2:22' # The MAC address of a Bluetooth adapter on the server. The server might have multiple Bluetooth adapters. 
     port = 7   # 3 is an arbitrary choice. However, it must match the port used by the client.  
     backlog = 1
     size = 1024
