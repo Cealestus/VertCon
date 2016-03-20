@@ -83,20 +83,20 @@ def cycle_LEDs():
         if currentLED == 1:
             print("Setting Floor 1 LED")
             GPIO.output(33, GPIO.HIGH)
-            GPIO.output(35, GPIO.HIGH)
-            GPIO.output(37, GPIO.HIGH)
+            GPIO.output(35, GPIO.LOW)
+            GPIO.output(37, GPIO.LOW)
             time.sleep(15)
         elif currentLED == 2:
             print("Setting Floor 2 LED")
             GPIO.output(33, GPIO.LOW)
-            GPIO.output(35, GPIO.LOW)
-            GPIO.output(37, GPIO.HIGH)
+            GPIO.output(35, GPIO.HIGH)
+            GPIO.output(37, GPIO.LOW)
             time.sleep(5)
         else:
             print("Setting Floor 3 LED")
             GPIO.output(33, GPIO.LOW)
-            GPIO.output(35, GPIO.HIGH)
-            GPIO.output(37, GPIO.LOW)
+            GPIO.output(35, GPIO.LOW)
+            GPIO.output(37, GPIO.HIGH)
             time.sleep(5)
         #time.sleep(15)
         if currentLED < 3:
@@ -160,7 +160,7 @@ def runPrimary():
         client.close()
         s.close()
 
-#Thread for selecting the floor based on the current counter values
+#Thread for calling elevator and selecting the floor based on the current counter values
 def floorSelection():
     global counter1
     global counter2
@@ -168,13 +168,18 @@ def floorSelection():
     while 1:
         lock.acquire()
         if counter1 >= 20:
+            #Rotate elevator motor one way
             GPIO.output(36, GPIO.HIGH)
             time.sleep(.75)
             GPIO.output(36, GPIO.LOW)
             time.sleep(1)
+            #Return elevator motor to original position
             GPIO.output(32, GPIO.HIGH)
             time.sleep(.3)
             GPIO.output(32, GPIO.LOW)
+            #Wait until photodiode registers elevator has reached floor
+            #Rotate floor motor one way
+            #Return floor motor to original position
             print("Floor Select: 1")
             counter1 = 0
         if counter2 >= 20:
