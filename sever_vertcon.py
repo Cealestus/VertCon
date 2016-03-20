@@ -12,8 +12,10 @@ GPIO.setup(38, GPIO.OUT)
 GPIO.setup(36, GPIO.OUT)
 GPIO.setup(37, GPIO.OUT)
 GPIO.setup(35, GPIO.OUT)
+GPIO.setup(32, GPIO.OUT)
 GPIO.setup(33, GPIO.OUT)
 GPIO.setup(31, GPIO.OUT)
+GPIO.output(32, GPIO.LOW)
 GPIO.output(36, GPIO.LOW)
 GPIO.output(38, GPIO.LOW)
 GPIO.output(40, GPIO.LOW)
@@ -83,17 +85,20 @@ def cycle_LEDs():
             GPIO.output(33, GPIO.HIGH)
             GPIO.output(35, GPIO.HIGH)
             GPIO.output(37, GPIO.HIGH)
+            time.sleep(15)
         elif currentLED == 2:
             print("Setting Floor 2 LED")
             GPIO.output(33, GPIO.LOW)
             GPIO.output(35, GPIO.LOW)
             GPIO.output(37, GPIO.HIGH)
+            time.sleep(5)
         else:
             print("Setting Floor 3 LED")
             GPIO.output(33, GPIO.LOW)
             GPIO.output(35, GPIO.HIGH)
             GPIO.output(37, GPIO.LOW)
-        time.sleep(15)
+            time.sleep(5)
+        #time.sleep(15)
         if currentLED < 3:
             currentLED = currentLED + 1
         else:
@@ -164,6 +169,12 @@ def floorSelection():
         lock.acquire()
         if counter1 >= 20:
             GPIO.output(36, GPIO.HIGH)
+            time.sleep(.75)
+            GPIO.output(36, GPIO.LOW)
+            time.sleep(1)
+            GPIO.output(32, GPIO.HIGH)
+            time.sleep(.3)
+            GPIO.output(32, GPIO.LOW)
             print("Floor Select: 1")
             counter1 = 0
         if counter2 >= 20:
