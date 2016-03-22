@@ -7,14 +7,26 @@ import time
 GPIO.setmode(GPIO.BOARD)
 
 #Setup the GPIO pins used to control the system
-GPIO.setup(40, GPIO.OUT)
-GPIO.setup(38, GPIO.OUT)
-GPIO.setup(36, GPIO.OUT)
-GPIO.setup(37, GPIO.OUT)
-GPIO.setup(35, GPIO.OUT)
-GPIO.setup(32, GPIO.OUT)
-GPIO.setup(33, GPIO.OUT)
-GPIO.setup(31, GPIO.OUT)
+GPIO.setup(40, GPIO.OUT) #Down button select
+GPIO.setup(38, GPIO.OUT) #Down button release
+GPIO.setup(36, GPIO.OUT) #Floor 1 selection
+GPIO.setup(37, GPIO.OUT) #Floor 4 IR
+GPIO.setup(35, GPIO.OUT) #Floor 3 IR
+GPIO.setup(32, GPIO.OUT) #Floor 1 release
+GPIO.setup(33, GPIO.OUT) #Floor 1 IR
+GPIO.setup(31, GPIO.OUT) #Up button select
+GPIO.setup(29, GPIO.OUT) #Up button release
+GPIO.setup(16, GPIO.OUT) #Floor 4 select
+GPIO.setup(15, GPIO.OUT) #Floor 4 release
+GPIO.setup(13, GPIO.OUT) #Floor 3 select
+GPIO.setup(12, GPIO.INPUT) #Up photodiode
+GPIO.setup(11, GPIO.OUT) #Floor 3 release
+GPIO.setup(7, GPIO.INPUT) #Down photodiode
+
+GPIO.output(11, GPIO.LOW)
+GPIO.output(13, GPIO.LOW)
+GPIO.output(15, GPIO.LOW)
+GPIO.output(16, GPIO.LOW)
 GPIO.output(32, GPIO.LOW)
 GPIO.output(36, GPIO.LOW)
 GPIO.output(38, GPIO.LOW)
@@ -28,6 +40,7 @@ counter2 = 0
 ping2 = 0
 counter3 = 0
 ping3 = 0
+FLOOR = 2
 
 #Setup locks for concurrency
 lock = threading.Lock()
@@ -168,27 +181,80 @@ def floorSelection():
     while 1:
         lock.acquire()
         if counter1 >= 20:
-            #Rotate elevator motor one way
+            #Rotate motor for down button
+            GPIO.output(40, GPIO.HIGH)
+            time.sleep(.75)
+            GPIO.output(40, GPIO.LOW)
+            time.sleep(1)
+            #Return direction motor to original position
+            GPIO.output(38, GPIO.HIGH)
+            time.sleep(.3)
+            GPIO.output(38, GPIO.LOW)
+            #Wait until photodiode signal goes low
+            while GPIO.input(7) == GPIO.HIGH:
+                time.sleep(.1)
+            #Rotate floor selection motor
             GPIO.output(36, GPIO.HIGH)
             time.sleep(.75)
             GPIO.output(36, GPIO.LOW)
             time.sleep(1)
-            #Return elevator motor to original position
+            #Return floor selection motor to original position
             GPIO.output(32, GPIO.HIGH)
             time.sleep(.3)
             GPIO.output(32, GPIO.LOW)
             #Wait until photodiode registers elevator has reached floor
-            #Rotate floor motor one way
-            #Return floor motor to original position
-            print("Floor Select: 1")
             counter1 = 0
+        lock.release()
+        lock.acquire()
         if counter2 >= 20:
-            GPIO.output(38, GPIO.HIGH)
-            print("Floor Select: 2")
+            #Rotate motor for up button
+            GPIO.output(31, GPIO.HIGH)
+            time.sleep(.75)
+            GPIO.output(31, GPIO.LOW)
+            time.sleep(1)
+            #Return up button motor to original position
+            GPIO.output(29, GPIO.HIGH)
+            time.sleep(.3)
+            GPIO.output(29, GPIO.LOW)
+            #Wait until photodiode signal goes low
+            while GPIO.input(12) == GPIO.HIGH:
+                time.sleep(.1)
+            #Rotate floor selection motor
+            GPIO.output(13, GPIO.HIGH)
+            time.sleep(.75)
+            GPIO.output(13, GPIO.LOW)
+            time.sleep(1)
+            #Return floor selection motor to original position
+            GPIO.output(11, GPIO.HIGH)
+            time.sleep(.3)
+            GPIO.output(11, GPIO.LOW)
+            #Wait until photodiode registers elevator has reached floor
             counter2 = 0
+        lock.release()
+        lock.acquire()
         if counter3 >= 20:
-            GPIO.output(40, GPIO.HIGH)
-            print("Floor Select: 3")
+            #Rotate motor for up button
+            GPIO.output(31, GPIO.HIGH)
+            time.sleep(.75)
+            GPIO.output(31, GPIO.LOW)
+            time.sleep(1)
+            #Return direction motor to original position
+            GPIO.output(29, GPIO.HIGH)
+            time(.3)
+            GPIO.output(29, GPIO.LOW)
+            #Wait until photodiode signal goes low
+            while GPIO.input(12) == GPIO.HIGH:
+                time.sleep(.1)
+            #Rotate floor selection motor
+            GPIO.output(16, GPIO.HIGH)
+            time.sleep(.75)
+            GPIO.output(16, GPIO.LOW)
+            time.sleep(1)
+            #Return floor selection motor to orignal position
+            GPIO.output(15, GPIO.HIGH)
+            time.sleep(.3)
+            GPIO.output(15, GPIO.LOW)
+            #Wait until photodiode registers elevator has reached floor
             counter3 = 0
         lock.release()
         time.sleep(2)
