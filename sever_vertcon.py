@@ -9,19 +9,19 @@ GPIO.setmode(GPIO.BOARD)
 #Setup the GPIO pins used to control the system
 GPIO.setup(40, GPIO.OUT) #Down button select
 GPIO.setup(38, GPIO.OUT) #Down button release
-GPIO.setup(36, GPIO.OUT) #Floor 1 selection
 GPIO.setup(37, GPIO.OUT) #Floor 4 IR
+GPIO.setup(36, GPIO.OUT) #Floor 1 selection
 GPIO.setup(35, GPIO.OUT) #Floor 3 IR
-GPIO.setup(32, GPIO.OUT) #Floor 1 release
 GPIO.setup(33, GPIO.OUT) #Floor 1 IR
+GPIO.setup(32, GPIO.OUT) #Floor 1 release
 GPIO.setup(31, GPIO.OUT) #Up button select
 GPIO.setup(29, GPIO.OUT) #Up button release
 GPIO.setup(16, GPIO.OUT) #Floor 4 select
 GPIO.setup(15, GPIO.OUT) #Floor 4 release
 GPIO.setup(13, GPIO.OUT) #Floor 3 select
-GPIO.setup(12, GPIO.INPUT) #Up photodiode
+GPIO.setup(12, GPIO.IN) #Up photodiode
 GPIO.setup(11, GPIO.OUT) #Floor 3 release
-GPIO.setup(7, GPIO.INPUT) #Down photodiode
+#GPIO.setup(7, GPIO.INPUT) #Down photodiode
 
 GPIO.output(11, GPIO.LOW)
 GPIO.output(13, GPIO.LOW)
@@ -191,7 +191,7 @@ def floorSelection():
             time.sleep(.3)
             GPIO.output(38, GPIO.LOW)
             #Wait until photodiode signal goes low
-            while GPIO.input(7) == GPIO.HIGH:
+            while GPIO.input(12) == GPIO.HIGH:
                 time.sleep(.1)
             #Rotate floor selection motor
             GPIO.output(36, GPIO.HIGH)
