@@ -15,9 +15,10 @@ GPIO.setup(35, GPIO.IN)
 GPIO.setup(33, GPIO.IN)
 GPIO.setup(31, GPIO.IN)
 while 1:
-    while GPIO.input(37) == GPIO.HIGH and GPIO.input(35) == GPIO.HIGH and GPIO.input(33) == GPIO.HIGH and GPIO.input(31) == GPIO.HIGH:
+    #while GPIO.input(37) == GPIO.HIGH and GPIO.input(35) == GPIO.HIGH and GPIO.input(33) == GPIO.HIGH and GPIO.input(31) == GPIO.HIGH:
+    while GPIO.input(37) == GPIO.HIGH:
         time.sleep(.01)
-    print('detected light' + str(datetime.datetime.now().time()))
+    print('detected light; ' + str(datetime.datetime.now().time()))
     text = "Hello"
     s.send(bytes(text, 'UTF-8'))
     time.sleep(.5)
