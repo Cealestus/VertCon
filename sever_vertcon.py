@@ -195,6 +195,7 @@ def floorSelection():
             GPIO.output(38, GPIO.HIGH)
             time.sleep(.3)
             GPIO.output(38, GPIO.LOW)
+            time.sleep(.2)
             #Wait until photodiode signal goes low
             while GPIO.input(12) == GPIO.HIGH:
                 time.sleep(.1)
@@ -221,6 +222,7 @@ def floorSelection():
             GPIO.output(29, GPIO.HIGH)
             time.sleep(.3)
             GPIO.output(29, GPIO.LOW)
+            time.sleep(.2)
             #Wait until photodiode signal goes low
             while GPIO.input(12) == GPIO.HIGH:
                 time.sleep(.1)
@@ -247,6 +249,7 @@ def floorSelection():
             GPIO.output(29, GPIO.HIGH)
             time(.3)
             GPIO.output(29, GPIO.LOW)
+            time.sleep(.2)
             #Wait until photodiode signal goes low
             while GPIO.input(12) == GPIO.HIGH:
                 time.sleep(.1)
