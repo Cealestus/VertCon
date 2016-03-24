@@ -7,35 +7,21 @@ import time
 GPIO.setmode(GPIO.BOARD)
 
 #Setup the GPIO pins used to control the system
-GPIO.setup(40, GPIO.OUT) #Down button select
-GPIO.setup(38, GPIO.OUT) #Down button release
-GPIO.setup(37, GPIO.OUT) #Floor 4 IR
-GPIO.setup(36, GPIO.OUT) #Floor 1 selection
-GPIO.setup(35, GPIO.OUT) #Floor 3 IR
-GPIO.setup(33, GPIO.OUT) #Floor 1 IR
-GPIO.setup(32, GPIO.OUT) #Floor 1 release
-GPIO.setup(31, GPIO.OUT) #Up button select
-GPIO.setup(29, GPIO.OUT) #Up button release
-GPIO.setup(16, GPIO.OUT) #Floor 4 select
-GPIO.setup(15, GPIO.OUT) #Floor 4 release
-GPIO.setup(13, GPIO.OUT) #Floor 3 select
+GPIO.setup(40, GPIO.OUT, initial=GPIO.LOW) #Down button select
+GPIO.setup(38, GPIO.OUT, initial=GPIO.LOW) #Down button release
+GPIO.setup(37, GPIO.OUT, initial=GPIO.LOW) #Floor 4 IR
+GPIO.setup(36, GPIO.OUT, initial=GPIO.LOW) #Floor 1 selection
+GPIO.setup(35, GPIO.OUT, initial=GPIO.LOW) #Floor 3 IR
+GPIO.setup(33, GPIO.OUT, initial=GPIO.LOW) #Floor 1 IR
+GPIO.setup(32, GPIO.OUT, initial=GPIO.LOW) #Floor 1 release
+GPIO.setup(31, GPIO.OUT, initial=GPIO.LOW) #Up button select
+GPIO.setup(29, GPIO.OUT, initial=GPIO.LOW) #Up button release
+GPIO.setup(16, GPIO.OUT, initial=GPIO.LOW) #Floor 4 select
+GPIO.setup(15, GPIO.OUT, initial=GPIO.LOW) #Floor 4 release
+GPIO.setup(13, GPIO.OUT, initial=GPIO.LOW) #Floor 3 select
 GPIO.setup(12, GPIO.IN) #Up photodiode
-GPIO.setup(11, GPIO.OUT) #Floor 3 release
-#GPIO.setup(7, GPIO.INPUT) #Down photodiode
-
-GPIO.output(11, GPIO.LOW)
-GPIO.output(13, GPIO.LOW)
-GPIO.output(15, GPIO.LOW)
-GPIO.output(16, GPIO.LOW)
-GPIO.output(29, GPIO.LOW)
-GPIO.output(31, GPIO.LOW)
-GPIO.output(32, GPIO.LOW)
-GPIO.output(33, GPIO.LOW)
-GPIO.output(35, GPIO.LOW)
-GPIO.output(36, GPIO.LOW)
-GPIO.output(37, GPIO.LOW)
-GPIO.output(38, GPIO.LOW)
-GPIO.output(40, GPIO.LOW)
+GPIO.setup(11, GPIO.OUT, initial=GPIO.LOW) #Floor 3 release
+#GPIO.setup(7, GPIO.IN) #Down photodiode
 
 #Setup global variables to be used
 currentLED = 1
@@ -103,20 +89,17 @@ def cycle_LEDs():
             GPIO.output(33, GPIO.HIGH)
             GPIO.output(35, GPIO.LOW)
             GPIO.output(37, GPIO.LOW)
-            time.sleep(15)
         elif currentLED == 2:
             print("Setting Floor 2 LED")
             GPIO.output(33, GPIO.LOW)
             GPIO.output(35, GPIO.HIGH)
             GPIO.output(37, GPIO.LOW)
-            time.sleep(5)
         else:
             print("Setting Floor 3 LED")
             GPIO.output(33, GPIO.LOW)
             GPIO.output(35, GPIO.LOW)
             GPIO.output(37, GPIO.HIGH)
-            time.sleep(5)
-        #time.sleep(15)
+        time.sleep(15)
         if currentLED < 3:
             currentLED = currentLED + 1
         else:
@@ -124,7 +107,7 @@ def cycle_LEDs():
 
 #Thread for running the bluetooth reception and indication of pings
 def runPrimary():
-    hostMACAddress = 'B8:27:EB:7C:B2:22' # The MAC address of a Bluetooth adapter on the server. The server might have multiple Bluetooth adapters. 
+    hostMACAddress = '98:58:8A:06:87:69' # The MAC address of a Bluetooth adapter on the server. The server might have multiple Bluetooth adapters. 
     port = 7   # 3 is an arbitrary choice. However, it must match the port used by the client.  
     backlog = 1
     size = 1024
@@ -160,7 +143,7 @@ def runPrimary():
                         pinglock.acquire()
                         ping2 = 0
                         pinglock.release()
-                        print("Received Signal for Floor Two")
+                        print("Received Signal for Floor Three")
                         client.send(data)
                     elif currentLED == 3:
                         lock.acquire()
@@ -169,7 +152,7 @@ def runPrimary():
                         pinglock.acquire()
                         ping3 = 0
                         pinglock.release()
-                        print("Received Signal for Floor 3")
+                        print("Received Signal for Floor Four")
                         client.send(data)
                 else:
                     print("Something went wrong")
